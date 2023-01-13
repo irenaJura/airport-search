@@ -1,0 +1,35 @@
+<div class="card mt-3">
+  <h2 class="card-header">
+    {{pageTitle}}
+  </h2>
+  <div class="card-body">
+    <label for="city">
+      <h3>City:</h3>
+    </label>
+    <input type="text" class="form-control" name="cityFilter" [(ngModel)]="city" (keyup)="searchCityAirports(city)">
+    <p *ngIf="!airports">Za pretragu zračnih luka upišite ime grada</p>
+    <p *ngIf="airports?.length === 0">Za upisan pojam nema rezultata</p>
+
+    <div class="table table-responsive">
+      <table class="table mb-100" *ngIf="airports && airports.length">
+        <thead>
+          <th>Airport</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let airport of airports">
+            <td class="col-md-11">
+              {{airport.name}}
+            </td>
+            <td class="col-md-1">
+              <button class="btn btn-outline-primary btn-sm" [routerLink]="['/airport', airport.id]">
+                See details
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
