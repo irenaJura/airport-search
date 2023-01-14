@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Airport } from '../airport';
 import { AirportService } from '../airport.service';
-import { ApiResponse } from '../apiresponse';
+import { LocalService } from '../local.service';
 
 @Component({
   selector: 'app-airport-list',
@@ -11,18 +10,27 @@ import { ApiResponse } from '../apiresponse';
 })
 export class AirportListComponent implements OnInit {
   pageTitle = 'Airport Search';
-  city = '';
-  airports?: Airport[];
+  airports: Airport[] = [];
   errorMessage = '';
+
+  get city(): string {
+    return this.airportService.cityFilter;
+  }
+  set city(value: string) {
+    this.airportService.cityFilter = value;
+    this.searchCityAirports(value);
+  }
 
   constructor(private airportService: AirportService) { }
 
   ngOnInit(): void {
+    this.city ? this.searchCityAirports(this.city) : null;
   }
 
   searchCityAirports(city: string): void {
     console.log('searching')
-    if (city) {
+
+    if (this.city) {
       this.airportService.getAirports(city).subscribe({
         next: airports => {
           this.airports = airports;
@@ -30,7 +38,8 @@ export class AirportListComponent implements OnInit {
         },
         error: err => this.errorMessage = err
       });
-    }
-  }
 
+    }
+
+  }
 }

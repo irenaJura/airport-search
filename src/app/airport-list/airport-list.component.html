@@ -6,12 +6,12 @@
     <label for="city">
       <h3>City:</h3>
     </label>
-    <input type="text" class="form-control" name="cityFilter" [(ngModel)]="city" (keyup)="searchCityAirports(city)">
-    <p *ngIf="!airports">Za pretragu zračnih luka upišite ime grada</p>
-    <p *ngIf="airports?.length === 0">Za upisan pojam nema rezultata</p>
+    <input type="text" class="form-control" name="cityFilter" [(ngModel)]="city">
+    <p class="m-2" *ngIf="!city">Za pretragu zračnih luka upišite ime grada</p>
+    <p class="m-2" *ngIf="city && airports.length === 0">Za upisan pojam nema rezultata</p>
 
     <div class="table table-responsive">
-      <table class="table mb-100" *ngIf="airports && airports.length">
+      <table class="table mb-100" *ngIf="city && airports.length">
         <thead>
           <th>Airport</th>
           <th></th>
@@ -22,7 +22,8 @@
               {{airport.name}}
             </td>
             <td class="col-md-1">
-              <button class="btn btn-outline-primary btn-sm" [routerLink]="['/airport', airport.id]">
+              <button class="btn btn-outline-primary btn-sm" [routerLink]="['/airport', airport.id]"
+                [style.width.px]="120">
                 See details
               </button>
             </td>
