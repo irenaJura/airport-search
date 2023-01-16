@@ -28,18 +28,15 @@ export class AirportListComponent implements OnInit {
   }
 
   searchCityAirports(city: string): void {
-    console.log('searching')
-
     if (this.city) {
-      this.airportService.getAirports(city).subscribe({
-        next: airports => {
-          this.airports = airports;
-          console.log(this.airports)
-        },
-        error: err => this.errorMessage = err
-      });
-
+      setTimeout(() => {
+        this.airportService.getAirports(city).subscribe({
+          next: airports => {
+            this.airports = airports;
+          },
+          error: err => this.errorMessage = err
+        });
+      }, 300)
     }
-
   }
 }

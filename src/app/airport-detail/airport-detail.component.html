@@ -1,4 +1,4 @@
-<div class='card mt-3' *ngIf='airport'>
+<div class='card mt-3 mb-3' *ngIf='airport'>
   <div class='card-header'>{{airport.name}}</div>
 
   <div class='card-body'>
@@ -7,6 +7,13 @@
         <label class="col-md-2 col-form-label" for="name">Airport Name:</label>
         <div class="col-md-8">
           <input class="form-control" type="text" name="name" [(ngModel)]="airport.name" />
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="detailedName">Detailed Name:</label>
+        <div class="col-md-8">
+          <input class="form-control" type="text" name="detailedName" [(ngModel)]="airport.detailedName" />
         </div>
       </div>
 
@@ -23,6 +30,62 @@
           <input class="form-control" type="text" name="iataCode" [(ngModel)]="airport.iataCode" />
         </div>
       </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="address">Address:</label>
+        <div class="col-md-4">
+          <label class="col-md-4 col-form-label" for="cityName">City Name:</label>
+          <input class="form-control" type="text" name="cityName" [(ngModel)]="airport.address.cityName" />
+        </div>
+        <div class="col-md-4">
+          <label class="col-md-4 col-form-label" for="cityCode">City Code:</label>
+          <input class="form-control" type="text" name="cityCode" [(ngModel)]="airport.address.cityCode" />
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="address-1"></label>
+        <div class="col-md-4">
+          <label class="col-md-4 col-form-label" for="countryName">Country Name:</label>
+          <input class="form-control" type="text" name="countryName" [(ngModel)]="airport.address.countryName" />
+        </div>
+        <div class="col-md-4">
+          <label class="col-md-4 col-form-label" for="countryCode">Country Code:</label>
+          <input class="form-control" type="text" name="countryCode" [(ngModel)]="airport.address.countryCode" />
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="address-2"></label>
+        <div class="col-md-4">
+          <label class="col-md-4 col-form-label" for="regionCode">Region Code:</label>
+          <input class="form-control" type="text" name="regionCode" [(ngModel)]="airport.address.regionCode" />
+        </div>
+        <div class="col-md-4" [hidden]="!airport.address.stateCode">
+          <label class="col-md-4 col-form-label" for="stateCode">State Code:</label>
+          <input class="form-control" type="text" name="stateCode" [(ngModel)]="airport.address.stateCode" />
+        </div>
+      </div>
+
+      <div class="form-group row mb-2" [hidden]="!airport.analytics.travelers.score">
+        <label class="col-md-2 col-form-label" for="score">Traveler's Score:</label>
+        <div class="col-md-1">
+          <input class="form-control" type="number" name="score" [(ngModel)]="airport.analytics.travelers.score" />
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label class="col-md-2 col-form-label" for="geoCode">Geo Code:</label>
+        <div class="col-md-4">
+          <label class="col-md-4 col-form-label" for="latitude">Latitude:</label>
+          <input class="form-control" type="number" name="latitude" [(ngModel)]="airport.geoCode.latitude" />
+        </div>
+        <div class="col-md-4">
+          <label class="col-md-4 col-form-label" for="longitude">Longitude:</label>
+          <input class="form-control" type="number" name="longitude" [(ngModel)]="airport.geoCode.longitude" />
+        </div>
+      </div>
+
     </form>
   </div>
 

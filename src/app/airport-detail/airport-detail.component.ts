@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Airport } from '../airport';
+import { AirportDetail } from '../airport-detail';
 import { AirportService } from '../airport.service';
 import { LocalService } from '../local.service';
 
@@ -22,20 +23,22 @@ export class AirportDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      const id = Number(params.get('id'));
-      this.getProduct(id);
+      const id = params.get('id');
+      if (id) this.getAirport(id);
     });
   }
 
-  getProduct(id: number) {
+  getAirport(id: string) {
     const localStorageAirport = this.localService.getData('airport-' + id);
     if (localStorageAirport) {
       this.airport = JSON.parse(localStorageAirport);
-      console.log(this.airport)
+      console.log('localstorage')
     } else {
-      console.log('calling api')
       this.airportService.getAirport(id)?.subscribe(
-        data => this.airport = data,
+        data => {
+          this.airport = data.data,
+            console.log('api call')
+        },
         error => this.errorMessage = <any>error
       );
     }

@@ -1,14 +1,19 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { from, Observable, of, throwError } from 'rxjs';
-import { catchError, delay, map, tap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Airport } from './airport';
+import { AirportDetail } from './airport-detail';
 import { ApiResponse } from './apiresponse';
 
-let headers = new HttpHeaders({
-  'Authorization': 'Bearer 3NbcOxTj3CPoGxqnx9nTU7q8KHA5'
+let auth_token = "qvGMsZRXoHgYkQYDFoD4PT4Q7IEe";
+
+const headers = new HttpHeaders({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${auth_token}`
 });
 
+const requestOptions = { headers: headers };
 @Injectable({
   providedIn: 'root'
 })
@@ -16,35 +21,29 @@ let headers = new HttpHeaders({
 export class AirportService {
   private baseUrl = 'https://test.api.amadeus.com/v1';
   private airports: Airport[] = [];
-  private airport: Airport | undefined;
   public cityFilter = '';
 
   constructor(private http: HttpClient) { }
 
   getAirports(city: string): Observable<Airport[]> {
-    // return this.http.get<ApiResponse>(this.baseUrl + '/reference-data/locations?subType=AIRPORT&keyword=' + city, { headers: headers })
-    //   .pipe(
-    //     delay(300),
-    //     map(response => response.meta.count > 5 ? response.data.slice(0, 5) : response.data),
-    //     tap(data => this.airports = data),
-    //     catchError(this.handleError)
-    //   );
+    // avoid API call when user goes back to list page
+    if (this.airports.length) return of(this.airports);
 
-    // if (this.airports.length) return of(this.airports);
-    this.airports = [
-      { name: 'test', id: '1', iataCode: 'test' },
-      { name: 'blabla', id: '2', iataCode: 'bla' }];
-    // this.airports = [];
-    return of(this.airports);
+    return this.http.get<ApiResponse>(this.baseUrl + '/reference-data/locations?subType=AIRPORT&keyword=' + city, requestOptions)
+      .pipe(
+        map(response => response.meta.count > 5 ? response.data.slice(0, 5) : response.data),
+        tap(data => this.airports = data),
+        catchError(this.handleError)
+      );
 
   }
 
-  getAirport(id: number): Observable<Airport> | undefined {
-    this.airport = this.airports.find(a => +a.id === id);
-    return this.airport ? of(this.airport) : undefined;
+  getAirport(id: string): Observable<AirportDetail> | undefined {
+    return this.http.get<AirportDetail>(this.baseUrl + '/reference-data/locations/' + id, requestOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
-
-
 
   private handleError(err: HttpErrorResponse): Observable<never> {
     let errorMessage: string;

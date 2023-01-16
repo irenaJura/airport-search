@@ -1,4 +1,4 @@
-import { Airport } from "./airport";
+import { Airport } from "./airport"
 
 export interface ApiResponse {
   meta: {
