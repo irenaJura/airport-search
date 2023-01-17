@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Airport } from '../airport';
-import { AirportService } from '../airport.service';
-import { AuthService } from '../auth.service';
+import { Airport } from '../models/airport';
+import { AirportService } from '../services/airport.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-airport-list',

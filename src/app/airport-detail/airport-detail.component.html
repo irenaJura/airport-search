@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <div class="form-group row mb-2" [hidden]="!airport.analytics.travelers.score">
+      <div class="form-group row mb-2" *ngIf="airport.analytics.travelers">
         <label class="col-md-2 col-form-label" for="score">Traveler's Score:</label>
         <div class="col-md-1">
           <input class="form-control" type="number" name="score" [(ngModel)]="airport.analytics.travelers.score" />

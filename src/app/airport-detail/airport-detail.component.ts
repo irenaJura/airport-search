@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Airport } from '../airport';
-import { AirportService } from '../airport.service';
-import { AuthService } from '../auth.service';
-import { LocalService } from '../local.service';
+import { LocalService } from '../services/local.service';
+import { AirportService } from '../services/airport.service';
+import { Airport } from '../models/airport';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-airport-detail',
@@ -33,15 +33,11 @@ export class AirportDetailComponent implements OnInit {
     const localStorageAirport = this.localService.getData('airport-' + id);
     if (localStorageAirport) {
       this.airport = JSON.parse(localStorageAirport);
-      console.log('localstorage')
     } else if (this.authService.checkTokenValidity()) {
-      this.airportService.getAirport(id)?.subscribe(
-        data => {
-          this.airport = data.data,
-            console.log('api call')
-        },
-        error => this.errorMessage = <any>error
-      );
+      this.airportService.getAirport(id)?.subscribe({
+        next: data => this.airport = data.data,
+        error: err => this.errorMessage = err
+      });
     }
   }
 

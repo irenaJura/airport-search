@@ -1,9 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParamsOptions } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators'; import { AccessToken } from './access-token';
+import { catchError, tap } from 'rxjs/operators';
+import { AccessToken } from '../models/access-token';
+import { api_info } from '../secret/api-info';
 import { LocalService } from './local.service';
-import { api_info } from './secret/api-info';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,10 @@ export class AuthService {
 
   constructor(private http: HttpClient, private localService: LocalService) { }
 
-  setHeaders() {
+  setHeaders(token: string) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this.auth_token}`
+      'Authorization': `Bearer ${token}`
     });
     this.requestOptions = { headers: headers };
   }
@@ -33,26 +34,25 @@ export class AuthService {
 
       // if 30 minutes passed, get new token
       if (now - tokenCreated > 1800000) {
-        console.log('token expired');
         this.localService.removeData('token');
         this.getAccessToken().subscribe({
           next: () => {
             const object = { token: this.auth_token, timestamp: new Date().getTime() }
             this.localService.saveData('token', JSON.stringify(object));
-            this.setHeaders();
+            this.setHeaders(obj.token);
             return true;
           }
         })
       }
 
-      this.setHeaders();
+      this.setHeaders(obj.token);
       return true;
     } else {
       this.getAccessToken().subscribe({
         next: () => {
           const object = { token: this.auth_token, timestamp: new Date().getTime() }
           this.localService.saveData('token', JSON.stringify(object));
-          this.setHeaders();
+          this.setHeaders(object.token);
         }
       });
 
