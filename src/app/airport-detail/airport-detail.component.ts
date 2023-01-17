@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Airport } from '../airport';
-import { AirportDetail } from '../airport-detail';
 import { AirportService } from '../airport.service';
+import { AuthService } from '../auth.service';
 import { LocalService } from '../local.service';
 
 @Component({
@@ -18,7 +18,8 @@ export class AirportDetailComponent implements OnInit {
     private airportService: AirportService,
     private router: Router,
     private route: ActivatedRoute,
-    private localService: LocalService
+    private localService: LocalService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -33,7 +34,7 @@ export class AirportDetailComponent implements OnInit {
     if (localStorageAirport) {
       this.airport = JSON.parse(localStorageAirport);
       console.log('localstorage')
-    } else {
+    } else if (this.authService.checkTokenValidity()) {
       this.airportService.getAirport(id)?.subscribe(
         data => {
           this.airport = data.data,

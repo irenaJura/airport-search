@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Airport } from '../airport';
 import { AirportService } from '../airport.service';
-import { LocalService } from '../local.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-airport-list',
@@ -21,22 +21,21 @@ export class AirportListComponent implements OnInit {
     this.searchCityAirports(value);
   }
 
-  constructor(private airportService: AirportService) { }
+  constructor(private airportService: AirportService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.city ? this.searchCityAirports(this.city) : null;
   }
 
   searchCityAirports(city: string): void {
-    if (this.city) {
+    if (this.city && this.authService.checkTokenValidity()) {
       setTimeout(() => {
         this.airportService.getAirports(city).subscribe({
-          next: airports => {
-            this.airports = airports;
-          },
+          next: airports => this.airports = airports,
           error: err => this.errorMessage = err
         });
       }, 300)
     }
   }
+
 }
