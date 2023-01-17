@@ -46,4 +46,4 @@ testem.log
 Thumbs.db
 
 # ignore api_info.ts
-/secret
+/secret/api_info.ts
